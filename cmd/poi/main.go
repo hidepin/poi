@@ -27,7 +27,18 @@ func main() {
 		fatalErr = err
 		return
 	}
-	fmt.Println(dir)
+	f, err := os.Open(dir)
+	if err != nil {
+		fatalErr = err
+		return
+	}
+	defer f.Close()
+	fis, err := f.Readdir(0)
+	for _, fi := range fis {
+		if !fi.IsDir() {
+			fmt.Println(fi.Name())
+		}
+	}
 
 	fmt.Println("poi.")
 }
