@@ -15,13 +15,10 @@ func main() {
 		}
 	}()
 	var (
-		help = *flag.Bool("h", false, "help")
+		list bool
 	)
+	flag.BoolVar(&noexec, "n", false, "no exec")
 	flag.Parse()
 
-	if help {
-		flag.PrintDefaults()
-		return
-	}
 	fmt.Println("poi.")
 }
