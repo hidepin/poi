@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"os"
 )
 
 func main() {
@@ -13,12 +14,20 @@ func main() {
 			flag.PrintDefaults()
 			log.Fatalln(fatalErr)
 		}
+		os.Exit(0)
 	}()
 	var (
-		list bool
+		noexec bool
 	)
 	flag.BoolVar(&noexec, "n", false, "no exec")
 	flag.Parse()
+
+	dir, err := os.Getwd()
+	if err != nil {
+		fatalErr = err
+		return
+	}
+	fmt.Println(dir)
 
 	fmt.Println("poi.")
 }
