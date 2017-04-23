@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"log"
@@ -34,6 +35,10 @@ func main() {
 	flag.StringVar(&root_dir, "d", dir, "exec dir")
 	flag.BoolVar(&noexec, "n", false, "no exec")
 	flag.Parse()
+	if flag.NArg() != 0 {
+		fatalErr = errors.New("arguments error")
+		return
+	}
 
 	err = filepath.Walk(root_dir, clean_up)
 
