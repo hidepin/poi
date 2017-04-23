@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 )
 
 func main() {
@@ -27,18 +28,18 @@ func main() {
 		fatalErr = err
 		return
 	}
-	f, err := os.Open(dir)
+
+	err = filepath.Walk(dir, clean_up)
+
 	if err != nil {
 		fatalErr = err
 		return
 	}
-	defer f.Close()
-	fis, err := f.Readdir(0)
-	for _, fi := range fis {
-		if !fi.IsDir() {
-			fmt.Println(fi.Name())
-		}
-	}
 
 	fmt.Println("poi.")
+}
+
+func clean_up(path string, fi os.FileInfo, err error) error {
+	fmt.Println(path)
+	return nil
 }
