@@ -13,8 +13,9 @@ import (
 )
 
 var (
-	noexec   bool
-	root_dir string
+	noexec    bool
+	recursive bool
+	root_dir  string
 )
 
 func main() {
@@ -32,8 +33,9 @@ func main() {
 		return
 	}
 
-	flag.StringVar(&root_dir, "d", dir, "exec dir")
 	flag.BoolVar(&noexec, "n", false, "no exec")
+	flag.BoolVar(&recursive, "r", false, "recursive")
+	flag.StringVar(&root_dir, "d", dir, "exec dir")
 	flag.Parse()
 	if flag.NArg() != 0 {
 		fatalErr = errors.New("arguments error")
@@ -58,9 +60,11 @@ func clean_up(path string, fi os.FileInfo, err error) error {
 		cleaner = poi.EXEC
 	}
 
-	if fi.IsDir() && path != root_dir {
-		return filepath.SkipDir
-	} else if !fi.IsDir() && strings.HasSuffix(fi.Name(), "~") {
+	if fi.IsDir() {
+		if !recursive && path != root_dir {
+			return filepath.SkipDir
+		}
+	} else if strings.HasSuffix(fi.Name(), "~") {
 		cleaner.Clean(path)
 	}
 	return nil
