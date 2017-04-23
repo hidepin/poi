@@ -6,6 +6,9 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
+
+	"github.com/hidepin/poi"
 )
 
 func main() {
@@ -40,6 +43,9 @@ func main() {
 }
 
 func clean_up(path string, fi os.FileInfo, err error) error {
-	fmt.Println(path)
+	if !fi.IsDir() && strings.HasSuffix(fi.Name(), "~") {
+		cleaner := poi.NOEXEC
+		cleaner.Clean(path)
+	}
 	return nil
 }
